@@ -1,8 +1,10 @@
 const fs = require('fs')
+
 const chalk = require('chalk')
 const util = require('util')
 const readFilePromise = util.promisify(fs.readFile)
 const writeFilePromise = util.promisify(fs.writeFile)
+
 
 //lode data from json file
 const loadContract = async () => {
@@ -43,6 +45,17 @@ const checkMail = async (email)=>{
     })
 }
 
+
+//return all contract 
+ 
+const listContracts = async ()=>{
+   const result =  await readFilePromise('./contracts.json','utf-8');
+   console.log(JSON.parse(result))
+}
+
 module.exports = {
-    addContract
+    addContract,
+    checkMail,
+    listContracts
+
 }
