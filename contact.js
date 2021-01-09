@@ -6,6 +6,8 @@ const readFilePromise = util.promisify(fs.readFile)
 const writeFilePromise = util.promisify(fs.writeFile)
 
 
+
+
 //lode data from json file
 const loadContract = async () => {
     try {
@@ -17,6 +19,10 @@ const loadContract = async () => {
     }
 }
 
+
+
+
+
 //marching data 
 const addContract = async (contract,email) => {
     //console.log(contract)
@@ -27,15 +33,22 @@ const addContract = async (contract,email) => {
     }else{
         contracts.push(contract);
         await saveContract(contracts)
+        console.log(chalk.green.inverse('contract added successfully'))
     }
 }
+
+
+
 //save data to json file
 const saveContract = async (contracts) => {
     const contractJson = JSON.stringify(contracts)
     //console.log(contractJson)
     await writeFilePromise('./contracts.json', contractJson)
-    console.log(chalk.green.inverse('contract added successfully'))
+   
 }
+
+
+
 
 //checking email
 const checkMail = async (email)=>{
@@ -46,6 +59,8 @@ const checkMail = async (email)=>{
 }
 
 
+
+
 //return all contract 
  
 const listContracts = async ()=>{
@@ -53,9 +68,43 @@ const listContracts = async ()=>{
    console.log(JSON.parse(result))
 }
 
+
+
+//delete contract from contract.json 
+const deleteContract = async (email)=>{
+  const contracts = await loadContract()
+  const contract = await checkMail(email)
+  if(!contract){
+      console.log(chalk.red.inverse('no contract to remove'))
+  }else{
+        const updatedContracts =  contracts.filter(contract => contract.email!==email)
+        await saveContract(updatedContracts)
+        console.log(chalk.green.inverse('Contract successfully remove'))
+  }
+}
+
+
+
+//searching any contract
+
+const findContract = async (email)=>{
+    const contracts = await loadContract()
+    const contract = await checkMail(email)
+    if(!contract){
+        console.log(chalk.red.inverse('No contract with that email'))
+    }else{
+        const getContract = contracts.filter(contract => contract.email === email)
+        console.log(getContract)
+    }
+
+}
+
+
 module.exports = {
     addContract,
     checkMail,
-    listContracts
+    listContracts,
+    deleteContract,
+    findContract
 
 }
