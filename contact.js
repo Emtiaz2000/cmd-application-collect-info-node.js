@@ -50,11 +50,11 @@ const saveContract = async (contracts) => {
 
 
 
-//checking email
+//checking email always return every forEach or map filter
 const checkMail = async (email) => {
     const contracts = await loadContract();
     return contracts.find(everycontract => {
-         everycontract.email === email;
+        return everycontract.email === email;
     })
 }
 
